@@ -50,6 +50,15 @@ public class ItemSlotSH extends SyncHandler {
 
     @Override
     public void detectAndSendChanges(boolean init) {
+        checkUpdate(init);
+    }
+
+    public void checkUpdate() {
+        checkUpdate(false);
+    }
+
+    private void checkUpdate(boolean init) {
+        if (!isValid() || getSyncManager().isClient()) return;
         ItemStack itemStack = getSlot().getStack();
         if (itemStack.isEmpty() && this.lastStoredItem.isEmpty()) return;
         boolean onlyAmountChanged = false;
