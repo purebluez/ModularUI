@@ -2,6 +2,7 @@ package com.cleanroommc.modularui.value.sync;
 
 import com.cleanroommc.modularui.network.NetworkUtils;
 import com.cleanroommc.modularui.utils.FluidTankHandler;
+import com.cleanroommc.modularui.utils.IMultiFluidTankHandler;
 import com.cleanroommc.modularui.utils.MouseData;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,6 +46,10 @@ public class FluidSlotSyncHandler extends ValueSyncHandler<FluidStack> {
     public FluidSlotSyncHandler(IFluidTank fluidTank) {
         this.fluidTank = fluidTank;
         this.fluidHandler = FluidTankHandler.getTankFluidHandler(fluidTank);
+    }
+
+    public FluidSlotSyncHandler(IMultiFluidTankHandler fluidHandler, int index) {
+        this(fluidHandler.getFluidTank(index));
     }
 
     @Nullable

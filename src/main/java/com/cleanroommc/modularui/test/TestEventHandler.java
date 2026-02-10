@@ -26,19 +26,30 @@ import com.cleanroommc.modularui.utils.Platform;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
 import com.cleanroommc.modularui.widgets.TextWidget;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class EventHandler {
+public class TestEventHandler {
 
     public static boolean enabledRichTooltipEventTest = false;
     public static final String TEST_THEME = "mui:test_theme";
@@ -77,6 +88,7 @@ public class EventHandler {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onRichTooltip(RichTooltipEvent.Pre event) {
         if (enabledRichTooltipEventTest) {
@@ -92,11 +104,13 @@ public class EventHandler {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onThemeReload(ReloadThemeEvent.Pre event) {
         IThemeApi.get().registerTheme(testTheme);
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onOpenScreen(OpenScreenEvent event) {
         if (ModularUIConfig.enableTestOverlays) {
@@ -108,6 +122,7 @@ public class EventHandler {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     private ModularScreen getMainMenuOverlayTest(GuiMainMenu gui) {
         TextWidget<?> title = new TextWidget<>(IKey.str("ModularUI"));
         int[] colors = {Color.WHITE.main, Color.AMBER.main, Color.BLUE.main, Color.GREEN.main, Color.DEEP_PURPLE.main, Color.RED.main};
@@ -131,6 +146,7 @@ public class EventHandler {
                                 })));
     }
 
+    @SideOnly(Side.CLIENT)
     private ModularScreen getContainerOverlayTest(GuiContainer gui) {
         return new CustomModularScreen(ModularUI.ID) {
 
@@ -151,5 +167,33 @@ public class EventHandler {
                 super.onResize(width, height);
             }
         };
+    }
+
+    public static void preInit() {
+        ResourceLocation rl = new ResourceLocation(ModularUI.ID, "test_block");
+        TestBlock.testBlock.setRegistryName(rl);
+        TestBlock.testItemBlock.setRegistryName(rl);
+        GameRegistry.registerTileEntity(TestTile.class, rl);
+        TestItem.testItem.setRegistryName(ModularUI.ID, "test_item");
+    }
+
+    @SubscribeEvent
+    public void registerBlocks(RegistryEvent.Register<Block> event) {
+        IForgeRegistry<Block> registry = event.getRegistry();
+        registry.register(TestBlock.testBlock);
+    }
+
+    @SubscribeEvent
+    public void registerItems(RegistryEvent.Register<Item> event) {
+        IForgeRegistry<Item> registry = event.getRegistry();
+        registry.register(TestBlock.testItemBlock);
+        registry.register(TestItem.testItem);
+    }
+
+    @SubscribeEvent
+    public void registerModel(ModelRegistryEvent event) {
+        ModelResourceLocation mrl = new ModelResourceLocation(new ResourceLocation("diamond"), "inventory");
+        ModelLoader.setCustomModelResourceLocation(TestItem.testItem, 0, mrl);
+        ModelLoader.setCustomModelResourceLocation(TestBlock.testItemBlock, 0, new ModelResourceLocation(TestBlock.testItemBlock.getRegistryName(), "inventory"));
     }
 }
