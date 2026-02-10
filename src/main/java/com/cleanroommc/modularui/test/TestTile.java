@@ -7,7 +7,6 @@ import com.cleanroommc.modularui.drawable.Circle;
 import com.cleanroommc.modularui.drawable.FluidDrawable;
 import com.cleanroommc.modularui.drawable.GuiTextures;
 import com.cleanroommc.modularui.drawable.ItemDrawable;
-import com.cleanroommc.modularui.drawable.Rectangle;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.network.NetworkUtils;
 import com.cleanroommc.modularui.screen.ModularPanel;
@@ -29,7 +28,6 @@ import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widget.EmptyWidget;
 import com.cleanroommc.modularui.widget.ParentWidget;
 import com.cleanroommc.modularui.widgets.ButtonWidget;
-import com.cleanroommc.modularui.widgets.ColorPickerDialog;
 import com.cleanroommc.modularui.widgets.CycleButtonWidget;
 import com.cleanroommc.modularui.widgets.Dialog;
 import com.cleanroommc.modularui.widgets.DynamicSyncedWidget;
@@ -75,6 +73,10 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Various test and demos for synced widgets, slots and JEI interactions. Anything that doesn't fall into any of those categories goes into
+ * {@link TestGuis}.
+ */
 public class TestTile extends TileEntity implements IGuiHolder<PosGuiData>, ITickable {
 
     private static final Object2IntMap<Item> handlerSizeMap = new Object2IntOpenHashMap<>() {{
@@ -154,14 +156,9 @@ public class TestTile extends TileEntity implements IGuiHolder<PosGuiData>, ITic
                             .name("synced number col");
                 });
 
-        Rectangle colorPickerBackground = new Rectangle().color(Color.RED.main);
         ModularPanel panel = new ModularPanel("test_tile");
         IPanelHandler panelSyncHandler = syncManager.syncedPanel("other_panel", true, this::openSecondWindow);
-        IPanelHandler colorPicker = IPanelHandler.simple(panel, (mainPanel, player) -> new ColorPickerDialog(colorPickerBackground::color, colorPickerBackground.getColor(), true)
-                .setDraggable(true)
-                .relative(panel)
-                .top(0)
-                .rightRel(1f), true);
+
         PagedWidget.Controller tabController = new PagedWidget.Controller();
         panel.resizer()                        // returns object which is responsible for sizing
                 .size(176, 210)       // set a static size for the main panel
