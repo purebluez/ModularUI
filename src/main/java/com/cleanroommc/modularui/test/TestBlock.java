@@ -15,26 +15,21 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Supplier;
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class TestBlock extends Block implements ITileEntityProvider {
 
-    public static final Block testBlock = new TestBlock(TestTile::new);
+    public static final Block testBlock = new TestBlock();
     public static final ItemBlock testItemBlock = new ItemBlock(testBlock);
 
-    private final Supplier<TileEntity> tileEntitySupplier;
-
-    public TestBlock(Supplier<TileEntity> tileEntitySupplier) {
+    public TestBlock() {
         super(Material.ROCK);
-        this.tileEntitySupplier = tileEntitySupplier;
     }
 
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@NotNull World worldIn, int meta) {
-        return this.tileEntitySupplier.get();
+        return new TestTile();
     }
 
     @Override

@@ -43,7 +43,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import javax.annotation.Nonnull;
 
 @Optional.Interface(modid = ModularUI.ModIds.BAUBLES, iface = "baubles.api.IBauble")
 public class TestItem extends Item implements IGuiHolder<PlayerInventoryGuiData>, IBauble {
@@ -88,8 +87,8 @@ public class TestItem extends Item implements IGuiHolder<PlayerInventoryGuiData>
     }
 
     @Override
-    @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(World world, @NotNull EntityPlayer player, @Nonnull EnumHand hand) {
+    @NotNull
+    public ActionResult<ItemStack> onItemRightClick(World world, @NotNull EntityPlayer player, @NotNull EnumHand hand) {
         if (!world.isRemote) {
             GuiFactories.playerInventory().openFromHand(player, hand);
         }
