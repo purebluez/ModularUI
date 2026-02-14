@@ -195,7 +195,7 @@ public class WidgetTree extends TreeUtil {
         String syncKey = ModularSyncManager.AUTO_SYNC_PREFIX + panelName;
         foreachChildBFS(panel, widget -> {
             if (widget instanceof ISynced<?> synced) {
-                if (synced.isSynced() && !synced.getSyncHandler().isRegistered()) {
+                if (synced.isSynced() && !synced.getSyncHandler().isRegistered(syncManager)) {
                     syncManager.syncValue(syncKey, id.getAndIncrement(), synced.getSyncHandler());
                 }
             }
@@ -203,10 +203,10 @@ public class WidgetTree extends TreeUtil {
         }, includePanel);
     }
 
-    public static int countUnregisteredSyncHandlers(IWidget parent) {
+    public static int countUnregisteredSyncHandlers(PanelSyncManager syncManager, IWidget parent) {
         MutableInt count = new MutableInt();
         foreachChildBFS(parent, widget -> {
-            if (widget instanceof ISynced<?> synced && synced.isSynced() && !synced.getSyncHandler().isRegistered()) {
+            if (widget instanceof ISynced<?> synced && synced.isSynced() && !synced.getSyncHandler().isRegistered(syncManager)) {
                 count.increment();
             }
             return true;
