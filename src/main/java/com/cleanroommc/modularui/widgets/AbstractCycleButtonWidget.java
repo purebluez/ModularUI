@@ -576,6 +576,7 @@ public class AbstractCycleButtonWidget<W extends AbstractCycleButtonWidget<W>> e
      */
     @Override
     public W tooltipAutoUpdate(boolean update) {
+        super.tooltipAutoUpdate(update);
         expectCount();
         for (RichTooltip tooltip : this.tooltip) {
             tooltip.setAutoUpdate(update);
